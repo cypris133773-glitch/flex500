@@ -1,1 +1,62 @@
-<!DOCTYPE html>\n<html lang="de">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <meta name="description" content="Comprehensive German Fitness App with 500+ exercises">\n    <title>Fitness App</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <header>\n        <h1>Fitness App</h1>\n        <nav>\n            <ul>\n                <li><a href="#exercises">Exercises</a></li>\n                <li><a href="#workouts">Workouts</a></li>\n                <li><a href="#tracking">Tracking</a></li>\n            </ul>\n        </nav>\n    </header>\n    <section id="metadata">\n        <h2>Metadata Collection</h2>\n        <label for="age">Alter:</label>\n        <input type="range" id="age" min="0" max="100" value="30">\n        <label for="height">Größe (cm):</label>\n        <input type="range" id="height" min="140" max="220" value="180">\n        <label for="weight">Gewicht (kg):</label>\n        <input type="range" id="weight" min="30" max="200" value="70">\n    </section>\n    <section id="training-frequency">\n        <h2>Training Frequency Selection</h2>\n        <input type="checkbox" id="3-times">\n        <label for="3-times">3 times a week</label>\n        <input type="checkbox" id="5-times">\n        <label for="5-times">5 times a week</label>\n    </section>\n    <section id="injury-tracking">\n        <h2>Injury Tracking</h2>\n        <textarea placeholder="Please describe any injuries..."></textarea>\n    </section>\n    <section id="focus">\n        <h2>Muscle Group Focus</h2>\n        <select id="muscle-group">\n            <option value="full-body">Full Body</option>\n            <option value="upper-body">Upper Body</option>\n            <option value="lower-body">Lower Body</option>\n        </select>\n    </section>\n    <section id="duration-select">\n        <h2>Select Duration</h2>\n        <input type="number" id="duration" min="45" max="180" value="60">\n    </section>\n    <section id="goal">\n        <h2>Select Training Goal</h2>\n        <select id="training-goal">\n            <option value="strength">Strength</option>\n            <option value="muscle-building">Muscle Building</option>\n            <option value="definition">Definition</option>\n        </select>\n    </section>\n    <section id="difficulty">\n        <h2>Select Difficulty Level</h2>\n        <select id="difficulty-level">\n            <option value="beginner">Beginner</option>\n            <option value="advanced">Advanced</option>\n            <option value="pro">Pro</option>\n        </select>\n    </section>\n    <section id="split-selection">\n        <h2>Smart Split Selection</h2>\n        <select id="split">\n            <option value="upper-lower">1-2 days Upper/Lower</option>\n            <option value="PPL">3-4 days PPL</option>\n            <option value="bro-split">4-7 days Bro Split</option>\n        </select>\n    </section>\n    <section id="exercise-swapping">\n        <h2>Exercise Swapping</h2>\n        <button onclick="swapExercise()">Swap Exercise</button>\n    </section>\n    <section id="rest-timer">\n        <h2>Rest Timer</h2>\n        <p>Rest Time: <span id="rest-time">60</span> seconds</p>\n    </section>\n    <section id="workout-plans">\n        <h2>Workout Plans</h2>\n        <button onclick="saveWorkout()">Save Workout Plan</button>\n        <button onclick="deleteWorkout()">Delete Workout Plan</button>\n    </section>\n    <section id="workout-tracking">\n        <h2>Workout Tracking</h2>\n        <button onclick="startWorkout()">Start Workout</button>\n        <div id="countdown">\n            <p>Countdown Timer: <span id="countdown-timer">0</span> seconds</p>\n        </div>\n    </section>\n    <script src="script.js"></script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern fitness app for workout generation and tracking.">
+    <link rel="stylesheet" href="styles.css">
+    <title>Fitness App</title>
+</head>
+<body>
+    <header>
+        <h1>Fitness App</h1>
+        <nav>
+            <ul>
+                <li><a href="#workout">Workout Generator</a></li>
+                <li><a href="#tracker">Activity Tracker</a></li>
+                <li><a href="#saved-plans">Saved Plans</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="workout">
+            <h2>Workout Generator</h2>
+            <button id="generate-workout">Generate Workout</button>
+            <div id="workout-display"></div>
+        </section>
+
+        <section id="exercise-player">
+            <h2>Exercise Player</h2>
+            <video id="exercise-video" controls>
+                <source src="exercise.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+        <section id="tracker">
+            <h2>Activity Tracker</h2>
+            <form id="tracker-form">
+                <label for="activity">Activity:</label>
+                <input type="text" id="activity" required>
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" required>
+                <button type="submit">Track Activity</button>
+            </form>
+            <div id="activity-log"></div>
+        </section>
+
+        <section id="saved-plans">
+            <h2>Saved Plans</h2>
+            <div id="saved-plans-display"></div>
+            <button id="load-saved-plans">Load Saved Plans</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Fitness App. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
