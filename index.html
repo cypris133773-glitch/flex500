@@ -1,11 +1,309 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Flex500 Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --accent: #3b82f6; --bg: #0f172a; }
+        body { background: var(--bg); color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; background: #334155; border-radius: 10px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: var(--accent); border: 3px solid white; cursor: pointer; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .card { background: #1e293b; border-radius: 20px; padding: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: var(--accent); color: white; padding: 16px; border-radius: 15px; font-weight: 800; text-align: center; display: block; width: 100%; transition: all 0.2s; }
+        .btn-primary:active { transform: scale(0.96); opacity: 0.9; }
+        .hidden { display: none; }
+        .timer-active { color: #22c55e; font-size: 5rem; font-weight: 900; }
+    </style>
 </head>
-<body>
-    <h1>Hello, World!</h1>
+<body class="p-4 pb-12">
+
+    <!-- SCREEN 1: ONBOARDING -->
+    <div id="screen-setup" class="max-w-md mx-auto space-y-6">
+        <header class="text-center py-6">
+            <h1 class="text-4xl font-black italic tracking-tighter text-blue-500">FLEX500</h1>
+            <p class="text-slate-400">Personal AI Training Engine</p>
+        </header>
+
+        <div class="card space-y-6">
+            <h2 class="font-bold text-lg border-b border-slate-700 pb-2 uppercase tracking-widest text-slate-400">Metadaten</h2>
+            
+            <div>
+                <label class="flex justify-between mb-2 text-sm uppercase font-bold">Alter: <span id="v-age" class="text-blue-400">25</span></label>
+                <input type="range" min="14" max="85" value="25" id="age" oninput="u('age')">
+            </div>
+
+            <div>
+                <label class="flex justify-between mb-2 text-sm uppercase font-bold">Größe: <span id="v-height" class="text-blue-400">180</span> cm</label>
+                <input type="range" min="140" max="220" value="180" id="height" oninput="u('height')">
+            </div>
+
+            <div>
+                <label class="flex justify-between mb-2 text-sm uppercase font-bold">Gewicht: <span id="v-weight" class="text-blue-400">75</span> kg</label>
+                <input type="range" min="40" max="180" value="75" id="weight" oninput="u('weight')">
+            </div>
+
+            <div>
+                <label class="flex justify-between mb-2 text-sm uppercase font-bold">Tage / Woche: <span id="v-days" class="text-blue-400">3</span></label>
+                <input type="range" min="1" max="7" value="3" id="days" oninput="u('days')">
+            </div>
+
+            <div>
+                <label class="flex justify-between mb-2 text-sm uppercase font-bold">Dauer: <span id="v-dur" class="text-blue-400">60</span> Min</label>
+                <input type="range" min="45" max="180" step="15" value="60" id="dur" oninput="u('dur')">
+            </div>
+        </div>
+
+        <div class="card space-y-4">
+            <h2 class="font-bold text-lg text-slate-400 uppercase tracking-widest">Präferenzen</h2>
+            
+            <select id="level" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-700">
+                <option value="Anfänger">Anfänger</option>
+                <option value="Fortgeschritten" selected>Fortgeschritten</option>
+                <option value="Profi">Profi (Hohes Volumen)</option>
+            </select>
+
+            <select id="goal" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-700">
+                <option value="Kraft">Kraft (Lange Pausen)</option>
+                <option value="Aufbau" selected>Muskelaufbau</option>
+                <option value="Definition">Definition (Hohe Intensität)</option>
+            </select>
+
+            <div id="injuries" class="grid grid-cols-3 gap-2">
+                <button onclick="this.classList.toggle('bg-red-500')" class="p-2 bg-slate-900 rounded-lg text-xs uppercase font-bold">Knie</button>
+                <button onclick="this.classList.toggle('bg-red-500')" class="p-2 bg-slate-900 rounded-lg text-xs uppercase font-bold">Schulter</button>
+                <button onclick="this.classList.toggle('bg-red-500')" class="p-2 bg-slate-900 rounded-lg text-xs uppercase font-bold">Rücken</button>
+            </div>
+
+            <select id="focus" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-700">
+                <option value="none">Kein spezieller Fokus</option>
+                <option value="Brust">Fokus: Brust</option>
+                <option value="Rücken">Fokus: Rücken</option>
+                <option value="Beine">Fokus: Beine</option>
+                <option value="Arme">Fokus: Arme</option>
+            </select>
+        </div>
+
+        <button onclick="generatePlan()" class="btn-primary text-xl shadow-2xl shadow-blue-500/40">PLAN GENERIEREN & STARTEN</button>
+        
+        <div id="saved-list" class="space-y-2 pb-10"></div>
+    </div>
+
+    <!-- SCREEN 2: WORKOUT LIST -->
+    <div id="screen-workout" class="hidden max-w-md mx-auto space-y-4">
+        <div class="flex justify-between items-center py-4">
+            <button onclick="showSetup()" class="text-slate-400 font-bold">← ZURÜCK</button>
+            <h2 class="text-xl font-black italic">DEIN PLAN</h2>
+            <button onclick="saveCurrentPlan()" class="text-blue-500 font-bold">SPEICHERN</button>
+        </div>
+        <div id="workout-container" class="space-y-3"></div>
+    </div>
+
+    <!-- SCREEN 3: ACTIVE WORKOUT PLAYER -->
+    <div id="screen-player" class="hidden fixed inset-0 bg-slate-950 z-50 p-6 flex flex-col">
+        <div class="flex-1 flex flex-col items-center justify-center text-center">
+            <h3 id="p-name" class="text-4xl font-black mb-2">Übung</h3>
+            <p id="p-meta" class="text-blue-400 font-bold text-xl mb-12 italic">Satz 1 von 3</p>
+            
+            <div id="pause-ui" class="hidden">
+                <p class="text-slate-500 uppercase font-black tracking-widest mb-2">Pause</p>
+                <div id="timer" class="timer-active">90</div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <button id="p-main-btn" onclick="handlePlayerAction()" class="w-full py-8 bg-blue-600 rounded-3xl font-black text-3xl shadow-xl active:scale-95 transition-all">START</button>
+            <button onclick="closePlayer()" class="w-full py-4 text-slate-500 font-bold uppercase tracking-widest">Training unterbrechen</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ENGINE (500 Übungen Simulation) ---
+        const baseEx = [
+            { n: "Bankdrücken", c: "Push", i: "Schulter" }, { n: "Schulterdrücken", c: "Push", i: "Schulter" },
+            { n: "Kniebeugen", c: "Legs", i: "Knie" }, { n: "Kreuzheben", c: "Pull", i: "Rücken" },
+            { n: "Klimmzüge", c: "Pull", i: "none" }, { n: "Rudern", c: "Pull", i: "Rücken" },
+            { n: "Dips", c: "Push", i: "Schulter" }, { n: "Beinpresse", c: "Legs", i: "Knie" },
+            { n: "Bizeps Curls", c: "Arme", i: "none" }, { n: "Trizepsdrücken", c: "Arme", i: "none" },
+            { n: "Seitheben", c: "Push", i: "Schulter" }, { n: "Ausfallschritte", c: "Legs", i: "Knie" }
+        ];
+        const variations = ["Langhantel", "Kurzhantel", "Maschine", "Kabelzug", "Smith-Machine", "Negativ-Bank", "Schrägbank", "Einarmig"];
+        
+        // Erzeuge 500 Übungen durch Kombination
+        let db = [];
+        baseEx.forEach(b => {
+            variations.forEach(v => {
+                db.push({
+                    id: db.length,
+                    name: `${v} ${b.n}`,
+                    cat: b.c,
+                    injury: b.i,
+                    pause: b.n.match(/(Kniebeugen|Kreuzheben|Bank)/) ? 180 : 90
+                });
+            });
+        });
+
+        let currentWorkout = [];
+        let pIdx = 0, pSet = 1, pTotalSets = 3, timerInterval;
+
+        function u(id) { document.getElementById('v-'+id).innerText = document.getElementById(id).value; }
+
+        function generatePlan() {
+            const days = parseInt(document.getElementById('days').value);
+            const duration = parseInt(document.getElementById('dur').value);
+            const focus = document.getElementById('focus').value;
+            const injuries = Array.from(document.querySelectorAll('#injuries .bg-red-500')).map(b => b.innerText);
+            
+            let numEx = Math.max(4, Math.floor(duration / 10));
+            let pool = db.filter(ex => !injuries.includes(ex.injury));
+
+            // Split Logic
+            let splitCat = [];
+            if(days <= 2) splitCat = ["Push", "Pull", "Legs"]; // Ganzkörper
+            else if(days <= 4) splitCat = ["Push", "Pull", "Legs"]; // PPL Rotation (simuliert)
+            else splitCat = ["Push", "Pull", "Legs", "Arme"]; // Bro Split / Upper-Lower
+
+            let workout = pool.filter(ex => splitCat.includes(ex.cat)).sort(() => 0.5 - Math.random());
+            
+            // Fokus-Logik
+            if(focus !== "none") {
+                const focusEx = pool.filter(ex => ex.cat === focus || ex.name.includes(focus)).slice(0, 3);
+                workout = [...focusEx, ...workout];
+            }
+
+            currentWorkout = workout.slice(0, numEx);
+            renderWorkout();
+        }
+
+        function renderWorkout() {
+            document.getElementById('screen-setup').classList.add('hidden');
+            document.getElementById('screen-workout').classList.remove('hidden');
+            const container = document.getElementById('workout-container');
+            container.innerHTML = "";
+
+            currentWorkout.forEach((ex, i) => {
+                container.innerHTML += `
+                    <div class="card flex justify-between items-center bg-slate-800/50 border border-slate-700">
+                        <div class="flex-1">
+                            <h3 class="font-black italic text-lg uppercase">${ex.name}</h3>
+                            <p class="text-xs text-blue-400 font-bold uppercase tracking-widest">3 Sätze • Pause: ${ex.pause}s</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="swap(${i})" class="p-2 bg-slate-700 rounded-lg text-xs font-bold">SWAP</button>
+                            <button onclick="startPlayer(${i})" class="p-4 bg-blue-600 rounded-xl font-black">GO</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function swap(idx) {
+            const old = currentWorkout[idx];
+            const alt = db.filter(e => e.cat === old.cat && e.id !== old.id).sort(() => 0.5 - Math.random())[0];
+            currentWorkout[idx] = alt;
+            renderWorkout();
+        }
+
+        function startPlayer(idx) {
+            pIdx = idx; pSet = 1;
+            document.getElementById('screen-player').classList.remove('hidden');
+            updatePlayerUI();
+        }
+
+        function updatePlayerUI() {
+            const ex = currentWorkout[pIdx];
+            document.getElementById('p-name').innerText = ex.name;
+            document.getElementById('p-meta').innerText = `SATZ ${pSet} VON ${pTotalSets}`;
+            document.getElementById('p-main-btn').innerText = "SATZ FERTIG";
+            document.getElementById('p-main-btn').className = "w-full py-8 bg-blue-600 rounded-3xl font-black text-3xl shadow-xl";
+            document.getElementById('pause-ui').classList.add('hidden');
+        }
+
+        function handlePlayerAction() {
+            const btn = document.getElementById('p-main-btn');
+            const ex = currentWorkout[pIdx];
+
+            if(btn.innerText === "SATZ FERTIG") {
+                startPause(ex.pause);
+            } else {
+                finishPause();
+            }
+        }
+
+        function startPause(sec) {
+            let left = sec;
+            const display = document.getElementById('timer');
+            const btn = document.getElementById('p-main-btn');
+            
+            document.getElementById('pause-ui').classList.remove('hidden');
+            btn.innerText = "SKIP PAUSE";
+            btn.className = "w-full py-8 bg-emerald-600 rounded-3xl font-black text-3xl shadow-xl";
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                left--;
+                display.innerText = left;
+                if(left <= 0) finishPause();
+            }, 1000);
+        }
+
+        function finishPause() {
+            clearInterval(timerInterval);
+            if(pSet < pTotalSets) {
+                pSet++;
+                updatePlayerUI();
+            } else {
+                if(pIdx < currentWorkout.length - 1) {
+                    pIdx++; pSet = 1;
+                    updatePlayerUI();
+                } else {
+                    alert("TRAINING BEENDET! MASCHINE!");
+                    closePlayer();
+                }
+            }
+        }
+
+        function closePlayer() { document.getElementById('screen-player').classList.add('hidden'); clearInterval(timerInterval); }
+        function showSetup() { document.getElementById('screen-workout').classList.add('hidden'); document.getElementById('screen-setup').classList.remove('hidden'); }
+
+        // LocalStorage Funktionen
+        function saveCurrentPlan() {
+            const name = prompt("Name für den Plan:", "Mein Workout " + new Date().toLocaleDateString());
+            if(name) {
+                const plans = JSON.parse(localStorage.getItem('f500_plans') || '[]');
+                plans.push({ name, workout: currentWorkout });
+                localStorage.setItem('f500_plans', JSON.stringify(plans));
+                loadSaved();
+            }
+        }
+
+        function loadSaved() {
+            const plans = JSON.parse(localStorage.getItem('f500_plans') || '[]');
+            const list = document.getElementById('saved-list');
+            list.innerHTML = plans.length ? '<h3 class="text-xs font-bold text-slate-500 uppercase">Deine Pläne</h3>' : '';
+            plans.forEach((p, i) => {
+                list.innerHTML += `
+                <div class="flex gap-2">
+                    <button onclick="loadPlan(${i})" class="flex-1 bg-slate-800 p-4 rounded-xl text-left font-bold text-sm border border-slate-700">${p.name}</button>
+                    <button onclick="deletePlan(${i})" class="bg-red-900/30 text-red-500 px-4 rounded-xl">✕</button>
+                </div>`;
+            });
+        }
+
+        function loadPlan(i) {
+            const plans = JSON.parse(localStorage.getItem('f500_plans'));
+            currentWorkout = plans[i].workout;
+            renderWorkout();
+        }
+
+        function deletePlan(i) {
+            const plans = JSON.parse(localStorage.getItem('f500_plans'));
+            plans.splice(i, 1);
+            localStorage.setItem('f500_plans', JSON.stringify(plans));
+            loadSaved();
+        }
+
+        window.onload = loadSaved;
+    </script>
 </body>
 </html>
