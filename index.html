@@ -3,60 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A modern fitness app for workout generation and tracking.">
-    <link rel="stylesheet" href="styles.css">
-    <title>Fitness App</title>
+    <title>Modern iOS-Style Fitness App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f9ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0077cc;
+        }
+        .slider {
+            width: 100%;
+        }
+        .button {
+            background-color: #0077cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #005fa3;
+        }
+        .exercise {
+            margin: 15px 0;
+        }
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Fitness App</h1>
-        <nav>
-            <ul>
-                <li><a href="#workout">Workout Generator</a></li>
-                <li><a href="#tracker">Activity Tracker</a></li>
-                <li><a href="#saved-plans">Saved Plans</a></li>
-            </ul>
-        </nav>
-    </header>
+        <label for="age">Age:</label>
+        <input type="range" id="age" class="slider" min="15" max="100">
+        <span id="ageValue">30</span>
 
-    <main>
-        <section id="workout">
-            <h2>Workout Generator</h2>
-            <button id="generate-workout">Generate Workout</button>
-            <div id="workout-display"></div>
-        </section>
+        <label for="height">Height (cm):</label>
+        <input type="range" id="height" class="slider" min="100" max="250">
+        <span id="heightValue">175</span>
 
-        <section id="exercise-player">
-            <h2>Exercise Player</h2>
-            <video id="exercise-video" controls>
-                <source src="exercise.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </section>
+        <label for="weight">Weight (kg):</label>
+        <input type="range" id="weight" class="slider" min="40" max="150">
+        <span id="weightValue">70</span>
 
-        <section id="tracker">
-            <h2>Activity Tracker</h2>
-            <form id="tracker-form">
-                <label for="activity">Activity:</label>
-                <input type="text" id="activity" required>
-                <label for="duration">Duration (minutes):</label>
-                <input type="number" id="duration" required>
-                <button type="submit">Track Activity</button>
-            </form>
-            <div id="activity-log"></div>
-        </section>
+        <label for="frequency">Training Frequency (days per week):</label>
+        <input type="number" id="frequency" value="3" min="1" max="7">
 
-        <section id="saved-plans">
-            <h2>Saved Plans</h2>
-            <div id="saved-plans-display"></div>
-            <button id="load-saved-plans">Load Saved Plans</button>
-        </section>
-    </main>
+        <label for="injuries">Injury Tracking:</label>
+        <textarea id="injuries" placeholder="List any injuries..."></textarea>
 
-    <footer>
-        <p>&copy; 2026 Fitness App. All rights reserved.</p>
-    </footer>
+        <label for="muscleGroup">Muscle Group Focus:</label>
+        <select id="muscleGroup">
+            <option value="full">Full Body</option>
+            <option value="upper">Upper Body</option>
+            <option value="lower">Lower Body</option>
+        </select>
 
-    <script src="app.js"></script>
+        <label for="duration">Duration (minutes):</label>
+        <input type="range" id="duration" class="slider" min="45" max="180">
+        <span id="durationValue">60</span>
+
+        <label for="goal">Training Goal:</label>
+        <select id="goal">
+            <option value="strength">Kraft/Strength</option>
+            <option value="muscle_building">Aufbau/Muscle Building</option>
+            <option value="definition">Definition</option>
+        </select>
+
+        <label for="difficulty">Difficulty Level:</label>
+        <select id="difficulty">
+            <option value="beginner">Anfänger/Beginner</option>
+            <option value="advanced">Fortgeschritten/Advanced</option>
+            <option value="pro">Profi/Pro</option>
+        </select>
+
+        <h2>Workout Generator</h2>
+        <button class="button">Generate Workout</button>
+        <div id="workoutDisplay"></div>
+
+        <h2>Workout Player</h2>
+        <div id="exerciseDisplay" class="exercise"></div>
+        <label for="restTimer">Rest Timer:</label>
+        <input type="number" id="restTimer" value="90" min="60" max="120">
+
+        <button class="button">Start Workout</button>
+        <button class="button">Save Workout Plan</button>
+    </div>
+
+    <script>
+        const ageSlider = document.getElementById('age');
+        const ageValue = document.getElementById('ageValue');
+        ageSlider.oninput = function() {
+            ageValue.innerText = this.value;
+        };
+
+        const heightSlider = document.getElementById('height');
+        const heightValue = document.getElementById('heightValue');
+        heightSlider.oninput = function() {
+            heightValue.innerText = this.value;
+        };
+
+        const weightSlider = document.getElementById('weight');
+        const weightValue = document.getElementById('weightValue');
+        weightSlider.oninput = function() {
+            weightValue.innerText = this.value;
+        };
+
+        const durationSlider = document.getElementById('duration');
+        const durationValue = document.getElementById('durationValue');
+        durationSlider.oninput = function() {
+            durationValue.innerText = this.value;
+        };
+    </script>
 </body>
 </html>
