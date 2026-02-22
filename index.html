@@ -1,5 +1,80 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Fitness App</title>\n    <link rel="stylesheet" href="style.css">\n    <script src="script.js" defer></script>\n</head>\n<body>\n    <div class="container">\n        <header>\n            <h1>Fitness App</h1>\n            <nav>\n                <ul class="bottom-nav">\n                    <li><a href="#home">Home</a></li>\n                    <li><a href="#workouts">Workouts</a></li>\n                    <li><a href="#log">Activity Log</a></li>\n                    <li><a href="#profile">Profile</a></li>\n                </ul>\n            </nav>\n        </header>\n        <main>\n            <section id="home">\n                <h2>Welcome to Your Fitness Journey</h2>\n            </section>\n            <section id="workouts">\n                <h2>Your Workouts</h2>\n                <div id="workout-generator">\n                    <!-- Workout generator UI will go here -->\n                </div>\n            </section>\n            <section id="log">\n                <h2>Activity Log</h2>\n                <div id="log-area">\n                    <!-- Activity logging UI will go here -->\n                </div>\n            </section>\n            <section id="profile">\n                <h2>Your Profile</h2>\n                <form id="profile-form">\n                    <label for="age">Age:</label>\n                    <input type="range" id="age" name="age" min="10" max="100">\n                    <label for="height">Height (cm):</label>\n                    <input type="range" id="height" name="height" min="100" max="250">\n                    <label for="weight">Weight (kg):</label>\n                    <input type="range" id="weight" name="weight" min="30" max="200">\n                    <button type="submit">Save</button>\n                </form>\n            </section>\n        </main>\n    </div>\n</body>\n</html>\n
-/* CSS */
-body {\n    background-color: #f0f9ff;\n    color: #0077cc;\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    padding: 0;\n}\n.container {\n    max-width: 900px;\n    margin: auto;\n    padding: 20px;\n    border-radius: 15px;\n    background: rgba(255, 255, 255, 0.8);\n    backdrop-filter: blur(10px);\n    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);\n}\n.bottom-nav {\n    display: flex;\n    justify-content: space-around;\n    padding: 10px 0;\n}\na {\n    text-decoration: none;\n    color: #0077cc;\n}\n
-// JavaScript
-// Placeholder for your workout logic\ndocument.getElementById('profile-form').addEventListener('submit', function(event) {\n    event.preventDefault();\n    let age = document.getElementById('age').value;\n    let height = document.getElementById('height').value;\n    let weight = document.getElementById('weight').value;\n    console.log(`Saved Profile: Age: ${age}, Height: ${height}, Weight: ${weight}`);\n});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLEX500 Fitness App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #00aaff, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+        }
+        .workout-generator {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #00aaff;
+            border-radius: 10px;
+        }
+        .exercise {
+            border: 1px solid #00aaff;
+            padding: 10px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FLEX500 Fitness App</h1>
+    </header>
+    <div class="dashboard">
+        <div class="card">
+            <h2>Stats</h2>
+            <p>Calories Burned: 500</p>
+            <p>Total Workouts: 15</p>
+            <p>Progress: 75%</p>
+        </div>
+        <div class="card">
+            <h2>Workout Generator</h2>
+            <button onclick="generateWorkout()">Generate Workout</button>
+        </div>
+        <div class="card">
+            <h2>Progress Tracking</h2>
+            <p>Current Week Performance: Good</p>
+        </div>
+    </div>
+    <div class="workout-generator">
+        <h2>Workout Generator</h2>
+        <div id="exercise-list">
+            <!-- Populate with exercise alternatives -->
+            <div class="exercise">Push Up</div>
+            <div class="exercise">Squat</div>
+            <div class="exercise">Deadlift</div>
+            <div class="exercise">Bench Press</div>
+            <div class="exercise">Lunge</div>
+            <!-- Add more as needed -->
+        </div>
+        <p>Choose your workout based on days and duration.</p>
+    </div>
+    <script>
+        function generateWorkout() {
+            alert('Workout has been generated!');
+        }
+        // Additional logic can be added here for intelligent split selection and workout player
+    </script>
+</body>
+</html>
